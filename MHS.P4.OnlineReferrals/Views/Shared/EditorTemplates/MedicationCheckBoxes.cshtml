@@ -1,0 +1,17 @@
+﻿@model MHS.P4.OnlineReferrals.Models.MedicationCheckBoxes
+@using MHS.P4.Language
+
+
+    <div class="form-group col-sm-6" >
+        <div class="MedicationCheckBoxes">
+            @Html.HiddenFor(x => x.Id)
+            @Html.CheckBoxFor(x => x.IsChecked, new { Id = Model.Name })
+            @Html.HiddenFor(x => x.Name)
+            @Html.LabelFor(x => x.IsChecked, Model.Name)
+            @if (Model.HasNotes == true)
+            {
+                @Html.TextBoxFor(x => x.Notes, null, new { @class = "form-control" })
+            }
+            <br />
+        </div>
+            </div>
