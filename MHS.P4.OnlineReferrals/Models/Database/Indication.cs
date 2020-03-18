@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MHS.P4.OnlineReferrals.Models.Entities
+namespace MHS.P4.OnlineReferrals.Models.Database
 {
-    public partial class Medication
+    public partial class Indication
     {
-        public Guid MedicationId { get; set; }
+        public Guid IndicationId { get; set; }
         public string Name { get; set; }
         public bool HasNotes { get; set; }
         public string NotesPrompt { get; set; }

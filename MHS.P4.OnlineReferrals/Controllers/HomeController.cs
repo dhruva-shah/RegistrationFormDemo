@@ -1,7 +1,7 @@
 ﻿using iTextSharp.text.pdf;
 using MHS.P4.Language;
 using MHS.P4.OnlineReferrals.Models;
-using MHS.P4.OnlineReferrals.Models.Entities;
+using MHS.P4.OnlineReferrals.Models.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +31,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
         [HttpGet]
         public IActionResult Index(string message)
         {
-            Log.Debug("Getting view");
+            Log.Information("Getting view");
             var model = new PocketModel() { };
             try
             {
@@ -68,6 +68,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 }
                 if (ModelState.IsValid && !model.isError)
                 {
+                    await SaveInDatabase(model);
                     bool result = FillForm(model);
                     if (result)
                     {
@@ -170,12 +171,59 @@ namespace MHS.P4.OnlineReferrals.Controllers
             return genderList;
         }
 
+        public async Task<bool> SaveInDatabase(PocketModel model)
+        {
+            Log.Information("Beginning to save in db");
+
+            try
+            {
+                PocketReferrals referral = new PocketReferrals();
+                referral.ReferringPhysician = model.ReferringPhysicianName;
+                referral.ReferringPhysicianFax = model.ReferringPhysicianFax;
+                referral.ReferringPhysicianCpso = model.ReferringPhysicianCPSO;
+                referral.InterpretingPhysician = model.InterpretingPhysicianName;
+                referral.PatientName = model.PatientName;
+                referral.AddressLine1 = model.AddressLine1;
+                referral.AddressLine2 = model.AddressLine2;
+                referral.City = model.City;
+                referral.Province = model.Province;
+                referral.PostalCode = model.PostalCode;
+                referral.Gender = model.Gender;
+                referral.Dob = DateTime.Parse(model.PatientDob);
+                referral.PatientPhone = model.PatientPhone;
+                referral.PatientHealthCardNum = model.PatientHealthCardNum;
+                referral.PatientHealthCardVersion = model.PatientHealthCardVersion;
+                referral.PatientCcname = model.PatientCC;
+                referral.PatientCcfax = model.PatientCCFax;
+                referral.IsPacemaker = model.isPacemaker;
+                referral.IsDefibrillator = model.isDefibrillator;
+                referral.IsTest2Weeks = model.TestRequested2Weeks;
+                referral.IsTestInconclusive = model.TestRepeatInconclusive;
+                referral.PatientReasonForReferral = getStringIndications(model.IndicationCheckBoxes);
+                referral.PatientMedications = getStringMedications(model.MedicationCheckBoxes);
+                referral.DateCreated = DateTime.Now;
+
+                dbContext.PocketReferrals.Add(referral);
+                await dbContext.SaveChangesAsync();
+
+                Log.Information("Model saved in db successfully");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occured saving patient data in the database. Error: {ex.Message}. Data: {model}");
+            }
+
+
+            return false;
+        }
+
         public bool FillForm(PocketModel model)
         {
             try
             {
                 string pdfTemplate = config["BlankPdf"];
-                string newFile = config["SavePdf"] + DateTime.Now.ToString().Replace(":", "-").Replace("/", "-") + ".pdf";
+                string newFile = config["SavePdf"] + "HeartHealthFAX-"+Guid.NewGuid().ToString().Replace("-",".")+ "--#'Web%20Upload'#.pdf";
 
                 PdfReader pdfReader = new PdfReader(pdfTemplate);
                 PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
@@ -206,29 +254,9 @@ namespace MHS.P4.OnlineReferrals.Controllers
 
                 string indications = "", medications = "", testrequested = "", device = "";
 
-                foreach (var x in model.IndicationCheckBoxes.Where(x => x.IsChecked))
-                {
-                    if (String.IsNullOrEmpty(x.Notes))
-                    {
-                        indications = indications + ", " + x.Name;
-                    }
-                    else
-                    {
-                        indications = indications + ", " + x.Name + ": " + x.Notes;
-                    }
-                }
+                indications = getStringIndications(model.IndicationCheckBoxes);
+                medications = getStringMedications(model.MedicationCheckBoxes);
 
-                foreach (var x in model.MedicationCheckBoxes.Where(x => x.IsChecked))
-                {
-                    if (String.IsNullOrEmpty(x.Notes))
-                    {
-                        medications = medications + ", " + x.Name;
-                    }
-                    else
-                    {
-                        medications = medications + ", " + x.Name + ": " + x.Notes;
-                    }
-                }
 
                 if (model.isPacemaker) { device = device + ", Pacemaker"; }
                 if (model.isDefibrillator) { device = device + ", Implanted Cardiac Defibrillator"; }
@@ -251,9 +279,57 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("An error occured adding fields in pdf. Error: " + ex.Message.ToString());
+                Log.Error($"An error occured adding fields in pdf. Error: {ex.Message}. Data: {model}");
                 return false;
             }
+        }
+
+        public string getStringIndications(List<IndicationCheckBoxes> values)
+        {
+            string indications = "";
+            try
+            {
+                foreach (var x in values.Where(x => x.IsChecked))
+                {
+                    if (String.IsNullOrEmpty(x.Notes))
+                    {
+                        indications = indications + ", " + x.Name;
+                    }
+                    else
+                    {
+                        indications = indications + ", " + x.Name + ": " + x.Notes;
+                    }
+                }
+            }catch(Exception ex)
+            {
+                Log.Error($"Error occured converting indications to string. Error {ex.Message.ToString()}. Indications: {values.Select(x=>x.Name.ToList())}");
+            }
+      
+            return indications;
+        }
+
+        public string getStringMedications(List<MedicationCheckBoxes> values)
+        {
+            string medications = "";
+
+            try { 
+            foreach (var x in values.Where(x => x.IsChecked))
+            {
+                if (String.IsNullOrEmpty(x.Notes))
+                {
+                    medications = medications + ", " + x.Name;
+                }
+                else
+                {
+                    medications = medications + ", " + x.Name + ": " + x.Notes;
+                }
+            }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured converting medications to string. Error {ex.Message.ToString()}. Medications: {values.Select(x => x.Name.ToList())}");
+            }
+            return medications;
         }
 
     }
