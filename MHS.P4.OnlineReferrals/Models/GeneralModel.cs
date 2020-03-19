@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using MHS.P4.Language;
+using MHS.P4.OnlineReferrals.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MHS.P4.OnlineReferrals.Models
@@ -24,7 +25,7 @@ namespace MHS.P4.OnlineReferrals.Models
 
 
         [Display(Name = "Fax", ResourceType = typeof(Locale))]
-        //[Required(ErrorMessageResourceName = "Error_ReferringPhysicianFax", ErrorMessageResourceType = typeof(Locale))]
+        [RegularExpression(@"^[\d -]+$", ErrorMessageResourceName = "Error_PhoneFaxNumber", ErrorMessageResourceType = typeof(Locale))]
         public string ReferringPhysicianFax { get; set; }
 
         [Display(Name = "CPSO", ResourceType = typeof(Locale))]
@@ -77,25 +78,34 @@ namespace MHS.P4.OnlineReferrals.Models
 
         [Display(Name = "Province", ResourceType = typeof(Locale))]
         [Required(ErrorMessageResourceName = "Error_Province", ErrorMessageResourceType = typeof(Locale))]
+        [RegularExpression("^[a-zA-Z]*$", ErrorMessageResourceName = "Error_ProvinceChars", ErrorMessageResourceType = typeof(Locale))]
         public string Province { get; set; }
 
 
         [Display(Name = "PostalCode", ResourceType = typeof(Locale))]
         [Required(ErrorMessageResourceName = "Error_PostalCode", ErrorMessageResourceType = typeof(Locale))]
+        [RegularExpression("[a-zA-Z][0-9][a-zA-Z] [0-9][a-zA-Z][0-9]", ErrorMessageResourceName = "Error_PostalCodeVal", ErrorMessageResourceType = typeof(Locale))]
         public string PostalCode { get; set; }
 
 
         [Display(Name = "Phone", ResourceType = typeof(Locale))]
         [Required(ErrorMessageResourceName = "Error_Phone", ErrorMessageResourceType = typeof(Locale))]
+        [RegularExpression(@"^[\d -]+$", ErrorMessageResourceName = "Error_PhoneFaxNumber", ErrorMessageResourceType = typeof(Locale))]
+        [StringLength(12, MinimumLength =12, ErrorMessageResourceName = "Error_PhoneFaxNumber", ErrorMessageResourceType = typeof(Locale))]
         public string PatientPhone { get; set; }
 
 
         [Display(Name = "PatientHealthCardNum", ResourceType = typeof(Locale))]
+        [RequiredIf("InsuranceType", "Text_isPublicInsurance",1, ErrorMessageResourceName = "Error_HealthCardNum", ErrorMessageResourceType = typeof(Locale))]
         public string PatientHealthCardNum { get; set; }
 
 
         [Display(Name = "PatientHealthCardVersion", ResourceType = typeof(Locale))]
+        //[RequiredIf("InsuranceType", "Text_isPublicInsurance", 1, ErrorMessageResourceName = "Error_HealthCardVersion", ErrorMessageResourceType = typeof(Locale))]
         public string PatientHealthCardVersion { get; set; }
+
+
+        public string InsuranceType { get; set; }
 
 
         [Display(Name = "CCName", ResourceType = typeof(Locale))]
@@ -103,6 +113,7 @@ namespace MHS.P4.OnlineReferrals.Models
 
 
         [Display(Name = "Fax", ResourceType = typeof(Locale))]
+        [RegularExpression(@"^[\d -]+$", ErrorMessageResourceName = "Error_PhoneFaxNumber", ErrorMessageResourceType = typeof(Locale))]
         public string PatientCCFax { get; set; }
 
 

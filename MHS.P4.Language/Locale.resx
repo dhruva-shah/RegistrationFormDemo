@@ -156,8 +156,17 @@
   <data name="Error_FileNotFound" xml:space="preserve">
     <value>This file could not be found on the server</value>
   </data>
+  <data name="Error_HealthCardNum" xml:space="preserve">
+    <value>Health card number is required.</value>
+  </data>
+  <data name="Error_HealthCardVersion" xml:space="preserve">
+    <value>Health card verison is required.</value>
+  </data>
   <data name="Error_InterpretingPhysician" xml:space="preserve">
     <value>Interpreting Physician is required</value>
+  </data>
+  <data name="Error_OtherNeeded" xml:space="preserve">
+    <value>Other cannot be empty when selected.</value>
   </data>
   <data name="Error_PathPutOn" xml:space="preserve">
     <value>Date and time the patch was put on is required</value>
@@ -174,11 +183,20 @@
   <data name="Error_Phone" xml:space="preserve">
     <value>Phone number is required</value>
   </data>
+  <data name="Error_PhoneFaxNumber" xml:space="preserve">
+    <value>Not a valid phone number. Phone numbers are only allowed in format 000-000-0000.</value>
+  </data>
   <data name="Error_PostalCode" xml:space="preserve">
     <value>Postal Code is required</value>
   </data>
+  <data name="Error_PostalCodeVal" xml:space="preserve">
+    <value>Postal code can only be of type A0A0A0.</value>
+  </data>
   <data name="Error_Province" xml:space="preserve">
     <value>Province is required</value>
+  </data>
+  <data name="Error_ProvinceChars" xml:space="preserve">
+    <value>Province cannot contain digits or special characters.</value>
   </data>
   <data name="Error_ReasonForReferral" xml:space="preserve">
     <value>At least one Reason For Referral is required</value>
@@ -259,7 +277,7 @@
     <value>72 HOUR HOLTER</value>
   </data>
   <data name="TextIsAcknowledge" xml:space="preserve">
-    <value>By referring the above patient for the m-CARDS&lt;sup&gt;TM&lt;/sup&gt; service, I acknowledge I have completed the patient education and technical set-up as outlined</value>
+    <value>By referring the above patient for the m-CARDS service, I acknowledge I have completed the patient education and technical set-up as outlined</value>
   </data>
   <data name="TextIsHCP" xml:space="preserve">
     <value>I acknowledge that I am a registered HCP.</value>
@@ -278,5 +296,17 @@
   </data>
   <data name="TextTestRequested" xml:space="preserve">
     <value>Test Requested:</value>
+  </data>
+  <data name="Text_InsuranceType" xml:space="preserve">
+    <value>InsuranceType</value>
+  </data>
+  <data name="Text_isCash" xml:space="preserve">
+    <value>Cash</value>
+  </data>
+  <data name="Text_isPrivateInsurance" xml:space="preserve">
+    <value>Private insurance</value>
+  </data>
+  <data name="Text_isPublicInsurance" xml:space="preserve">
+    <value>Public insurance</value>
   </data>
 </root>

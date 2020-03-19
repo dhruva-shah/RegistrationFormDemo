@@ -30,5 +30,8 @@ namespace MHS.P4.OnlineReferrals.Models.Database
         public bool? IsTest2Weeks { get; set; }
         public bool? IsTestInconclusive { get; set; }
         public DateTime? DateCreated { get; set; }
+
+        public string TestRequested { get; set; }
+        public string InsuranceType { get; set; }
     }
 }

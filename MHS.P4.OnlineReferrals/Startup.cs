@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using MHS.P4.OnlineReferrals.Models;
 using MHS.P4.OnlineReferrals.Models.Database;
+using MHS.P4.OnlineReferrals.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -71,6 +73,7 @@ namespace MHS.P4.OnlineReferrals
             services.AddDbContext<P4OnlineReferralsContext>(
                options => options.UseSqlServer(_configuration.GetConnectionString("P4OnlineReferralsEntities"))
                );
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -40,6 +40,8 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 model.IndicationCheckBoxes = getIndications();
                 model.MedicationCheckBoxes = getMedications();
                 model.GenderList = getGenderList();
+                model.InsuranceType = Locale.Text_isPublicInsurance;
+                model.TestRequested = Locale.TestRequested2Weeks;
                 return View(model);
             }
             catch (Exception ex)
@@ -66,6 +68,21 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 {
                     ModelState.AddModelError("IndicationCheckBoxes", Locale.Error_ReasonForReferral);
                 }
+                if (!String.IsNullOrEmpty(model.ReferringPhysicianFax))
+                {
+                    if (model.ReferringPhysicianFax.Length != 12)
+                    {
+                        ModelState.AddModelError("ReferringPhysicianFax", Locale.Error_PhoneFaxNumber);
+                    }
+                }
+                if (!String.IsNullOrEmpty(model.PatientCCFax))
+                {
+                    if (model.PatientCCFax.Length != 12)
+                    {
+                        ModelState.AddModelError("PatientCCFax", Locale.Error_PhoneFaxNumber);
+                    }
+                }
+
                 if (ModelState.IsValid && !model.isError)
                 {
                     await SaveInDatabase(model);
@@ -191,14 +208,14 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 referral.Gender = model.Gender;
                 referral.Dob = DateTime.Parse(model.PatientDob);
                 referral.PatientPhone = model.PatientPhone;
+                referral.InsuranceType = model.InsuranceType;
                 referral.PatientHealthCardNum = model.PatientHealthCardNum;
                 referral.PatientHealthCardVersion = model.PatientHealthCardVersion;
                 referral.PatientCcname = model.PatientCC;
                 referral.PatientCcfax = model.PatientCCFax;
                 referral.IsPacemaker = model.isPacemaker;
                 referral.IsDefibrillator = model.isDefibrillator;
-                referral.IsTest2Weeks = model.TestRequested2Weeks;
-                referral.IsTestInconclusive = model.TestRepeatInconclusive;
+                referral.TestRequested = model.TestRequested;
                 referral.PatientReasonForReferral = getStringIndications(model.IndicationCheckBoxes);
                 referral.PatientMedications = getStringMedications(model.MedicationCheckBoxes);
                 referral.DateCreated = DateTime.Now;
@@ -245,6 +262,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 pdfFormFields.SetField("PostalCode", model.PostalCode);
                 pdfFormFields.SetField("DOB", model.PatientDob);
                 pdfFormFields.SetField("PatientPhone", model.PatientPhone);
+                pdfFormFields.SetField("PatientInsuranceType", model.InsuranceType);
                 pdfFormFields.SetField("PatientHealthCardNum", model.PatientHealthCardNum);
                 pdfFormFields.SetField("PatientHealthCardVersion", model.PatientHealthCardVersion);
                 pdfFormFields.SetField("PatientCC", model.PatientCC);
@@ -252,7 +270,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
 
 
 
-                string indications = "", medications = "", testrequested = "", device = "";
+                string indications = "", medications = "", device = "";
 
                 indications = getStringIndications(model.IndicationCheckBoxes);
                 medications = getStringMedications(model.MedicationCheckBoxes);
@@ -261,13 +279,11 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 if (model.isPacemaker) { device = device + ", Pacemaker"; }
                 if (model.isDefibrillator) { device = device + ", Implanted Cardiac Defibrillator"; }
 
-                if (model.TestRequested2Weeks) { testrequested = testrequested + ", 2 weeks"; }
-                if (model.TestRepeatInconclusive) { testrequested = testrequested + ", Repeat if inconclusive"; }
 
                 pdfFormFields.SetField("Indications", indications);
                 pdfFormFields.SetField("Medications", medications);
                 pdfFormFields.SetField("Device", device);
-                pdfFormFields.SetField("TestRequested", testrequested);
+                pdfFormFields.SetField("TestRequested", model.TestRequested);
                 // flatten the form to remove editting options, set it to false  
                 // to leave the form open to subsequent manual edits  
                 pdfStamper.FormFlattening = true;

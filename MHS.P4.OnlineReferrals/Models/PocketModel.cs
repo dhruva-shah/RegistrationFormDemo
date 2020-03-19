@@ -16,6 +16,8 @@ namespace MHS.P4.OnlineReferrals.Models
         [Display(Name = "TestRepeatInconclusive", ResourceType = typeof(Locale))]
         public bool TestRepeatInconclusive { get; set; }
 
+        public string TestRequested { get; set; }
+
 
         [Display(Name = "ReqDate", ResourceType = typeof(Locale))]
         public DateTime ReqDate { get; set; }

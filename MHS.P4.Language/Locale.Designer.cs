@@ -178,11 +178,38 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Health card number is required..
+        /// </summary>
+        public static string Error_HealthCardNum {
+            get {
+                return ResourceManager.GetString("Error_HealthCardNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health card verison is required..
+        /// </summary>
+        public static string Error_HealthCardVersion {
+            get {
+                return ResourceManager.GetString("Error_HealthCardVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interpreting Physician is required.
         /// </summary>
         public static string Error_InterpretingPhysician {
             get {
                 return ResourceManager.GetString("Error_InterpretingPhysician", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other cannot be empty when selected..
+        /// </summary>
+        public static string Error_OtherNeeded {
+            get {
+                return ResourceManager.GetString("Error_OtherNeeded", resourceCulture);
             }
         }
         
@@ -232,6 +259,15 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not a valid phone number. Phone numbers are only allowed in format 000-000-0000..
+        /// </summary>
+        public static string Error_PhoneFaxNumber {
+            get {
+                return ResourceManager.GetString("Error_PhoneFaxNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Postal Code is required.
         /// </summary>
         public static string Error_PostalCode {
@@ -241,11 +277,29 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Postal code can only be of type A0A0A0..
+        /// </summary>
+        public static string Error_PostalCodeVal {
+            get {
+                return ResourceManager.GetString("Error_PostalCodeVal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Province is required.
         /// </summary>
         public static string Error_Province {
             get {
                 return ResourceManager.GetString("Error_Province", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Province cannot contain digits or special characters..
+        /// </summary>
+        public static string Error_ProvinceChars {
+            get {
+                return ResourceManager.GetString("Error_ProvinceChars", resourceCulture);
             }
         }
         
@@ -457,6 +511,42 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to InsuranceType.
+        /// </summary>
+        public static string Text_InsuranceType {
+            get {
+                return ResourceManager.GetString("Text_InsuranceType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cash.
+        /// </summary>
+        public static string Text_isCash {
+            get {
+                return ResourceManager.GetString("Text_isCash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private insurance.
+        /// </summary>
+        public static string Text_isPrivateInsurance {
+            get {
+                return ResourceManager.GetString("Text_isPrivateInsurance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public insurance.
+        /// </summary>
+        public static string Text_isPublicInsurance {
+            get {
+                return ResourceManager.GetString("Text_isPublicInsurance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CC.
         /// </summary>
         public static string TextCC {
@@ -484,7 +574,7 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By referring the above patient for the m-CARDS&lt;sup&gt;TM&lt;/sup&gt; service, I acknowledge I have completed the patient education and technical set-up as outlined.
+        ///   Looks up a localized string similar to By referring the above patient for the m-CARDS service, I acknowledge I have completed the patient education and technical set-up as outlined.
         /// </summary>
         public static string TextIsAcknowledge {
             get {
