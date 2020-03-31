@@ -118,15 +118,15 @@
              </div>
          </div>
 
-         <div id="publicInsurance" class="row pt-3 pl-4">
+         <div id="publicInsurance" class="form-row pt-3 pl-4 w-100">
              <div class="col-sm-7 pb-3">
                  @Html.LabelFor(x => x.PatientHealthCardNum)
-                 @Html.TextBoxFor(x => x.PatientHealthCardNum, new { @class = "form-control" })
+                 @Html.TextBoxFor(x => x.PatientHealthCardNum, new { @class = "form-control"})
                  @Html.ValidationMessageFor(x => x.PatientHealthCardNum, "", new { @class = "text-danger" })
              </div>
              <div class="col-sm-5 pb-3">
                  @Html.LabelFor(x => x.PatientHealthCardVersion)
-                 @Html.TextBoxFor(x => x.PatientHealthCardVersion, new { @class = "form-control" })
+                 @Html.TextBoxFor(x => x.PatientHealthCardVersion, new { @class = "form-control"})
                  @Html.ValidationMessageFor(x => x.PatientHealthCardVersion, "", new { @class = "text-danger" })
              </div>
          </div>
@@ -280,7 +280,8 @@
 
 
     $('.datepicker').datepicker({
-        endDate: '0d'
+        endDate: '0d',
+        format:'dd M yyyy'
 
     });
 

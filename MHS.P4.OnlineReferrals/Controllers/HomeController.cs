@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -273,6 +274,9 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 string indications = "", medications = "", device = "";
 
                 indications = getStringIndications(model.IndicationCheckBoxes);
+                var indi= Regex.Split(indications, "(?<=^(.{90})+)");
+                indications = String.Join("\n", indi.ToArray());
+
                 medications = getStringMedications(model.MedicationCheckBoxes);
 
 
