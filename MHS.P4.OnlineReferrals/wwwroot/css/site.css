@@ -1,6 +1,27 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+.datepicker-days .datepicker-switch {
+    display: none !important;
+}
+
+.datepicker-days .prev {
+    display: none !important;
+}
+
+.datepicker-days .next {
+    display: none !important;
+}
+
+.datepicker-months .prev {
+    display: none !important;
+}
+
+.datepicker-months .next {
+    display: none !important;
+}
+
+
 #mHealthLogo {
     max-height: 4vh;
 }

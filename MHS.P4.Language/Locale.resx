@@ -129,8 +129,11 @@
   <data name="City" xml:space="preserve">
     <value>City</value>
   </data>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>If you wish to receive a confirmation email that the referral was submitted successfully, please enter the email you want the confirmation to be sent to:</value>
+  </data>
   <data name="CPSO" xml:space="preserve">
-    <value>CPSO Number</value>
+    <value>CPSO/CNO Number</value>
   </data>
   <data name="Defibrillator" xml:space="preserve">
     <value>Implanted Cardiac Defibrillator</value>
@@ -148,10 +151,28 @@
     <value>City is required</value>
   </data>
   <data name="Error_CpsoOrFaxRequired" xml:space="preserve">
-    <value>Either CPSO number or fax number is required</value>
+    <value>Either CPSO/CNO number or fax number is required</value>
   </data>
   <data name="Error_DOB" xml:space="preserve">
     <value>DOB is required</value>
+  </data>
+  <data name="Error_DOBDay" xml:space="preserve">
+    <value>Day of birth is required</value>
+  </data>
+  <data name="Error_DOBFuture" xml:space="preserve">
+    <value>Date of Birth cannot be a future date</value>
+  </data>
+  <data name="Error_DOBInvalid" xml:space="preserve">
+    <value>The Date of Birth entered is not a valid date</value>
+  </data>
+  <data name="Error_DOBMonth" xml:space="preserve">
+    <value>Month of birth is required</value>
+  </data>
+  <data name="Error_DOBYear" xml:space="preserve">
+    <value>Year of birth is required</value>
+  </data>
+  <data name="Error_EmailInvalid" xml:space="preserve">
+    <value>The email entered is not valid</value>
   </data>
   <data name="Error_FileNotFound" xml:space="preserve">
     <value>This file could not be found on the server</value>
@@ -164,6 +185,9 @@
   </data>
   <data name="Error_InterpretingPhysician" xml:space="preserve">
     <value>Interpreting Physician is required</value>
+  </data>
+  <data name="Error_MonthInvalid" xml:space="preserve">
+    <value>The month entered is not valid</value>
   </data>
   <data name="Error_OtherNeeded" xml:space="preserve">
     <value>Other cannot be empty when selected.</value>
@@ -207,8 +231,14 @@
   <data name="Error_ReferringPhysicianFax" xml:space="preserve">
     <value>Fax connot be empty</value>
   </data>
+  <data name="Error_SendingConfirmationEmail" xml:space="preserve">
+    <value>Form submitted successfully, but an error occured sending the confirmation email. IT has been notified.</value>
+  </data>
   <data name="Error_SerialNum" xml:space="preserve">
     <value>Serial Number is required</value>
+  </data>
+  <data name="Error_SubmitError" xml:space="preserve">
+    <value>An error occured submitting your form. IT has been notified. If error persists, please contact PatientCare Health Consultants Inc.</value>
   </data>
   <data name="Error_ValueCannotBeNull" xml:space="preserve">
     <value>Value cannot be null</value>
@@ -297,6 +327,21 @@
   <data name="TextTestRequested" xml:space="preserve">
     <value>Test Requested:</value>
   </data>
+  <data name="Text_EmailLine1" xml:space="preserve">
+    <value>This is to confirm that your referral was submitted successfully.</value>
+  </data>
+  <data name="Text_EmailLine2" xml:space="preserve">
+    <value>If you have any questions or concerns, please reach out to us directly at hcp_info@mhs.healthcare</value>
+  </data>
+  <data name="Text_EmailResult" xml:space="preserve">
+    <value>I wish to have the results emailed to the email address entered above.</value>
+  </data>
+  <data name="Text_EmailSubject" xml:space="preserve">
+    <value>Referral Submitted Successfully!</value>
+  </data>
+  <data name="Text_HolterMessage" xml:space="preserve">
+    <value>72 Hour Holter referrals are available for Hamilton area patients only.</value>
+  </data>
   <data name="Text_InsuranceType" xml:space="preserve">
     <value>InsuranceType</value>
   </data>
@@ -308,5 +353,14 @@
   </data>
   <data name="Text_isPublicInsurance" xml:space="preserve">
     <value>Public insurance</value>
+  </data>
+  <data name="Text_MhsTeam" xml:space="preserve">
+    <value>Your mHealth Solutions Team</value>
+  </data>
+  <data name="Text_TestTypes" xml:space="preserve">
+    <value>Please select the type of test</value>
+  </data>
+  <data name="Text_ThankYou" xml:space="preserve">
+    <value>Thank you,</value>
   </data>
 </root>

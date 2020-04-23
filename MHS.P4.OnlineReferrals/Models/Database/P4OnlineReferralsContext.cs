@@ -18,7 +18,7 @@ namespace MHS.P4.OnlineReferrals.Models.Database
         public virtual DbSet<Indication> Indication { get; set; }
         public virtual DbSet<Medication> Medication { get; set; }
         public virtual DbSet<PocketReferrals> PocketReferrals { get; set; }
-        public virtual DbSet<SalesReportExport> SalesReportExport { get; set; }
+        public virtual DbSet<TestType> TestType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -59,13 +59,21 @@ namespace MHS.P4.OnlineReferrals.Models.Database
 
                 entity.Property(e => e.City).HasMaxLength(150);
 
+                entity.Property(e => e.ConfirmationEmail)
+                    .HasColumnName("confirmationEmail")
+                    .HasMaxLength(500);
+
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
                 entity.Property(e => e.Dob)
                     .HasColumnName("DOB")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.EmailResult).HasColumnName("emailResult");
+
                 entity.Property(e => e.Gender).HasMaxLength(1);
+
+                entity.Property(e => e.InsuranceType).HasMaxLength(100);
 
                 entity.Property(e => e.InterpretingPhysician).HasMaxLength(500);
 
@@ -101,98 +109,23 @@ namespace MHS.P4.OnlineReferrals.Models.Database
 
                 entity.Property(e => e.ReferringPhysicianCpso)
                     .HasColumnName("ReferringPhysicianCPSO")
-                    .HasMaxLength(15);
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.ReferringPhysicianFax).HasMaxLength(15);
+
+                entity.Property(e => e.TestRequested).HasMaxLength(100);
+
+                entity.HasOne(d => d.TestTypeNavigation)
+                    .WithMany(p => p.PocketReferrals)
+                    .HasForeignKey(d => d.TestType)
+                    .HasConstraintName("FK_PocketReferrals_TestType");
             });
 
-            modelBuilder.Entity<SalesReportExport>(entity =>
+            modelBuilder.Entity<TestType>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.TestId);
 
-                entity.ToView("SalesReportExport");
-
-                entity.Property(e => e.FirstName).HasColumnName("firstName");
-
-                entity.Property(e => e.FirstReferDate).HasColumnName("first_refer_date");
-
-                entity.Property(e => e.LastName).HasColumnName("lastName");
-
-                entity.Property(e => e.LastReferDate).HasColumnName("last_refer_date");
-
-                entity.Property(e => e.Loop2014).HasColumnName("Loop_2014");
-
-                entity.Property(e => e.Loop2015).HasColumnName("Loop_2015");
-
-                entity.Property(e => e.Loop2016).HasColumnName("Loop_2016");
-
-                entity.Property(e => e.Loop2017).HasColumnName("Loop_2017");
-
-                entity.Property(e => e.Loop2018).HasColumnName("Loop_2018");
-
-                entity.Property(e => e.Loop2019).HasColumnName("Loop_2019");
-
-                entity.Property(e => e.Loop2020).HasColumnName("Loop_2020");
-
-                entity.Property(e => e.MappedPhysicianId).HasColumnName("mappedPhysicianID");
-
-                entity.Property(e => e.Novi2014).HasColumnName("Novi+_2014");
-
-                entity.Property(e => e.Novi2015).HasColumnName("Novi+_2015");
-
-                entity.Property(e => e.Novi2016).HasColumnName("Novi+_2016");
-
-                entity.Property(e => e.Novi2017).HasColumnName("Novi+_2017");
-
-                entity.Property(e => e.Novi2018).HasColumnName("Novi+_2018");
-
-                entity.Property(e => e.Novi2019).HasColumnName("Novi+_2019");
-
-                entity.Property(e => e.Novi2020).HasColumnName("Novi+_2020");
-
-                entity.Property(e => e.Novi32014).HasColumnName("Novi3_2014");
-
-                entity.Property(e => e.Novi32015).HasColumnName("Novi3_2015");
-
-                entity.Property(e => e.Novi32016).HasColumnName("Novi3_2016");
-
-                entity.Property(e => e.Novi32017).HasColumnName("Novi3_2017");
-
-                entity.Property(e => e.Novi32018).HasColumnName("Novi3_2018");
-
-                entity.Property(e => e.Novi32019).HasColumnName("Novi3_2019");
-
-                entity.Property(e => e.Novi32020).HasColumnName("Novi3_2020");
-
-                entity.Property(e => e.PocketEcg2014).HasColumnName("PocketECG_2014");
-
-                entity.Property(e => e.PocketEcg2015).HasColumnName("PocketECG_2015");
-
-                entity.Property(e => e.PocketEcg2016).HasColumnName("PocketECG_2016");
-
-                entity.Property(e => e.PocketEcg2017).HasColumnName("PocketECG_2017");
-
-                entity.Property(e => e.PocketEcg2018).HasColumnName("PocketECG_2018");
-
-                entity.Property(e => e.PocketEcg2019).HasColumnName("PocketECG_2019");
-
-                entity.Property(e => e.PocketEcg2020).HasColumnName("PocketECG_2020");
-
-                entity.Property(e => e.Total2014).HasColumnName("total_2014");
-
-                entity.Property(e => e.Total2015).HasColumnName("total_2015");
-
-                entity.Property(e => e.Total2016).HasColumnName("total_2016");
-
-                entity.Property(e => e.Total2017).HasColumnName("total_2017");
-
-                entity.Property(e => e.Total2018).HasColumnName("total_2018");
-
-                entity.Property(e => e.Total2019).HasColumnName("total_2019");
-
-                entity.Property(e => e.Total2020).HasColumnName("total_2020");
-
-                entity.Property(e => e.TotalReferral).HasColumnName("total_referral");
+                entity.Property(e => e.TestName).HasMaxLength(500);
             });
 
             OnModelCreatingPartial(modelBuilder);

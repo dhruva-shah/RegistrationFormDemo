@@ -97,7 +97,16 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CPSO Number.
+        ///   Looks up a localized string similar to If you wish to receive a confirmation email that the referral was submitted successfully, please enter the email you want the confirmation to be sent to:.
+        /// </summary>
+        public static string ConfirmationEmail {
+            get {
+                return ResourceManager.GetString("ConfirmationEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPSO/CNO Number.
         /// </summary>
         public static string CPSO {
             get {
@@ -151,7 +160,7 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Either CPSO number or fax number is required.
+        ///   Looks up a localized string similar to Either CPSO/CNO number or fax number is required.
         /// </summary>
         public static string Error_CpsoOrFaxRequired {
             get {
@@ -165,6 +174,60 @@ namespace MHS.P4.Language {
         public static string Error_DOB {
             get {
                 return ResourceManager.GetString("Error_DOB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day of birth is required.
+        /// </summary>
+        public static string Error_DOBDay {
+            get {
+                return ResourceManager.GetString("Error_DOBDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date of Birth cannot be a future date.
+        /// </summary>
+        public static string Error_DOBFuture {
+            get {
+                return ResourceManager.GetString("Error_DOBFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Date of Birth entered is not a valid date.
+        /// </summary>
+        public static string Error_DOBInvalid {
+            get {
+                return ResourceManager.GetString("Error_DOBInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month of birth is required.
+        /// </summary>
+        public static string Error_DOBMonth {
+            get {
+                return ResourceManager.GetString("Error_DOBMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year of birth is required.
+        /// </summary>
+        public static string Error_DOBYear {
+            get {
+                return ResourceManager.GetString("Error_DOBYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The email entered is not valid.
+        /// </summary>
+        public static string Error_EmailInvalid {
+            get {
+                return ResourceManager.GetString("Error_EmailInvalid", resourceCulture);
             }
         }
         
@@ -201,6 +264,15 @@ namespace MHS.P4.Language {
         public static string Error_InterpretingPhysician {
             get {
                 return ResourceManager.GetString("Error_InterpretingPhysician", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The month entered is not valid.
+        /// </summary>
+        public static string Error_MonthInvalid {
+            get {
+                return ResourceManager.GetString("Error_MonthInvalid", resourceCulture);
             }
         }
         
@@ -331,11 +403,29 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Form submitted successfully, but an error occured sending the confirmation email. IT has been notified..
+        /// </summary>
+        public static string Error_SendingConfirmationEmail {
+            get {
+                return ResourceManager.GetString("Error_SendingConfirmationEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Serial Number is required.
         /// </summary>
         public static string Error_SerialNum {
             get {
                 return ResourceManager.GetString("Error_SerialNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occured submitting your form. IT has been notified. If error persists, please contact PatientCare Health Consultants Inc..
+        /// </summary>
+        public static string Error_SubmitError {
+            get {
+                return ResourceManager.GetString("Error_SubmitError", resourceCulture);
             }
         }
         
@@ -511,6 +601,51 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is to confirm that your referral was submitted successfully..
+        /// </summary>
+        public static string Text_EmailLine1 {
+            get {
+                return ResourceManager.GetString("Text_EmailLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you have any questions or concerns, please reach out to us directly at hcp_info@mhs.healthcare.
+        /// </summary>
+        public static string Text_EmailLine2 {
+            get {
+                return ResourceManager.GetString("Text_EmailLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I wish to have the results emailed to the email address entered above..
+        /// </summary>
+        public static string Text_EmailResult {
+            get {
+                return ResourceManager.GetString("Text_EmailResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Referral Submitted Successfully!.
+        /// </summary>
+        public static string Text_EmailSubject {
+            get {
+                return ResourceManager.GetString("Text_EmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 72 Hour Holter referrals are available for Hamilton area patients only..
+        /// </summary>
+        public static string Text_HolterMessage {
+            get {
+                return ResourceManager.GetString("Text_HolterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to InsuranceType.
         /// </summary>
         public static string Text_InsuranceType {
@@ -543,6 +678,33 @@ namespace MHS.P4.Language {
         public static string Text_isPublicInsurance {
             get {
                 return ResourceManager.GetString("Text_isPublicInsurance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your mHealth Solutions Team.
+        /// </summary>
+        public static string Text_MhsTeam {
+            get {
+                return ResourceManager.GetString("Text_MhsTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select the type of test.
+        /// </summary>
+        public static string Text_TestTypes {
+            get {
+                return ResourceManager.GetString("Text_TestTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you,.
+        /// </summary>
+        public static string Text_ThankYou {
+            get {
+                return ResourceManager.GetString("Text_ThankYou", resourceCulture);
             }
         }
         

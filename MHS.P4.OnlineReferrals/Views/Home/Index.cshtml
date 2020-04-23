@@ -4,260 +4,257 @@
     ViewData["Title"] = "Pocket Referrals";
 }
 
-<div class="bg-white w-100" style="padding: 5vh 0;">
-    <div class="h3 text-info text-center pb-4">@ViewData["Message"]</div>
-    <div class="h3 text-danger">@Model.Error</div>
-    <div class="container">
-        <h1 class="text-center">PocketECG</h1>
-    </div>
+    <div class="bg-white w-100" style="padding: 5vh 0;">
+        <div class="h3 text-info text-center pb-4">@ViewData["Message"]</div>
+        <div class="h3 text-danger">@Model.Error</div>
+        <div class="container">
+            <h1 class="text-center">Online Referral Form</h1>
+        </div>
 
-    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "patchForm", @class = "form-horizontal" }))
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "patchForm", @class = "form-horizontal" }))
         {
-    @Html.AntiForgeryToken()
+            @Html.AntiForgeryToken()
 
-
-
-    <div class="form-row">
-        <div class="col-12 pb-3 pt-5">
-            @Html.LabelFor(x => x.ReferringPhysicianName)
-            @Html.TextBoxFor(x => x.ReferringPhysicianName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(x => x.ReferringPhysicianName, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-sm-6 pb-3">
-            @Html.LabelFor(x => x.ReferringPhysicianFax)
-            @Html.TextBoxFor(x => x.ReferringPhysicianFax, new { @class = "form-control PhoneNumber" })
-           @Html.ValidationMessageFor(x => x.ReferringPhysicianFax, "", new { @class = "text-danger" })
-        </div>
-         <div class="col-sm-6 pb-3">
-             @Html.LabelFor(x => x.ReferringPhysicianCPSO)
-             @Html.TextBoxFor(x => x.ReferringPhysicianCPSO, new { @class = "form-control" })
-         </div>
-         <div class="col-12">
-             @Html.ValidationMessageFor(x => x.ReferringPhysicianCPSO, "", new { @class = "text-danger" })
-         </div>
-
-         @*<div class="col-12 pb-3">
-             @Html.LabelFor(x => x.InterpretingPhysicianName)
-             @Html.TextBoxFor(x => x.InterpretingPhysicianName, new { @class = "form-control" })
-             @Html.ValidationMessageFor(x => x.InterpretingPhysicianName, "", new { @class = "text-danger" })
-         </div>*@
-     </div>
-
-     <h3 class="h3 mt-5">@Locale.TextPatientInformation</h3>
-     <hr />
-
-
-     <div class="form-row">
-         <div class="col-sm-7 pb-3">
-
-             @Html.LabelFor(x => x.PatientName)
-             @Html.TextBoxFor(x => x.PatientName, new { @class = "form-control" })
-             @Html.ValidationMessageFor(x => x.PatientName, "", new { @class = "text-danger" })
-         </div>
-         <div class="col-sm-5 pb-3">
-             @Html.LabelFor(x => x.Gender)
-             @Html.DropDownListFor(m => m.Gender, Model.GenderList, new { @class = "form-control" })
-             @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
-         </div>
-
-         <div class="col-sm-7 pb-3">
-             @Html.LabelFor(x => x.AddressLine1)
-             @Html.TextBoxFor(x => x.AddressLine1, new { @class = "form-control" })
-             @Html.ValidationMessageFor(x => x.AddressLine1, "", new { @class = "text-danger" })
-         </div>
-         <div class="col-sm-5 pb-3">
-             @Html.LabelFor(x => x.AddressLine2)
-             @Html.TextBoxFor(x => x.AddressLine2, new { @class = "form-control" })
-         </div>
-
-         <div class="col-sm-5 pb-3">
-             @Html.LabelFor(x => x.City)
-             @Html.TextBoxFor(x => x.City, new { @class = "form-control" })
-             @Html.ValidationMessageFor(x => x.City, "", new { @class = "text-danger" })
-         </div>
-         <div class="col-sm-2 pb-3">
-             @Html.LabelFor(x => x.Province)
-             @Html.TextBoxFor(x => x.Province, new { @class = "form-control" })
-             @Html.ValidationMessageFor(x => x.Province, "", new { @class = "text-danger" })
-         </div>
-         <div class="col-sm-5 pb-3">
-             @Html.LabelFor(x => x.PostalCode)
-             @Html.TextBoxFor(x => x.PostalCode, new { @class = "form-control PostalCode" })
-             @Html.ValidationMessageFor(x => x.PostalCode, "", new { @class = "text-danger" })
-         </div>
-
-         <div class="col-sm-7 pb-3">
-             @Html.LabelFor(x => x.PatientDob)
-             @Html.TextBoxFor(model => model.PatientDob, new { @class = "form-control datepicker" })
-             <span class="glyphicon glyphicon-calendar"></span>
-
-             @Html.ValidationMessageFor(x => x.PatientDob, "", new { @class = "text-danger" })
-         </div>
-         <div class="col-sm-5 pb-3">
-             @Html.LabelFor(x => x.PatientPhone)
-             @Html.TextBoxFor(x => x.PatientPhone, new { @class = "form-control PhoneNumber" })
-             @Html.ValidationMessageFor(x => x.PatientPhone, "", new { @class = "text-danger" })
-         </div>
-
-
-         <h5 class="h5 mt-3 col-12 pb-2">@Locale.Text_InsuranceType</h5>
-         <div class="container-fluid">
-             <div class="form-check col-12">
-                 <div class="col">
-                     @Html.RadioButtonFor(x => x.InsuranceType, Locale.Text_isPublicInsurance, new { @class = "form-check-input",@checked=true, name = "insuranceTypeRadios" })
-                     @Html.Label(Locale.Text_isPublicInsurance, Locale.Text_isPublicInsurance, new { @class = "form-check-label" })
-                 </div>
-                 <div class="col">
-                     @Html.RadioButtonFor(x => x.InsuranceType, Locale.Text_isPrivateInsurance, new { @class = "form-check-input", name = "insuranceTypeRadios" })
-                     @Html.Label(Locale.Text_isPrivateInsurance, Locale.Text_isPrivateInsurance, new { @class = "form-check-label" })
-                 </div>
-                 <div class="col">
-                     @Html.RadioButtonFor(x => x.InsuranceType, Locale.Text_isCash, new { @class = "form-check-input", name = "insuranceTypeRadios" })
-                     @Html.Label(Locale.Text_isCash, Locale.Text_isCash, new { @class = "form-check-label" })
-                 </div>
-             </div>
-         </div>
-
-         <div id="publicInsurance" class="form-row pt-3 pl-4 w-100">
-             <div class="col-sm-7 pb-3">
-                 @Html.LabelFor(x => x.PatientHealthCardNum)
-                 @Html.TextBoxFor(x => x.PatientHealthCardNum, new { @class = "form-control"})
-                 @Html.ValidationMessageFor(x => x.PatientHealthCardNum, "", new { @class = "text-danger" })
-             </div>
-             <div class="col-sm-5 pb-3">
-                 @Html.LabelFor(x => x.PatientHealthCardVersion)
-                 @Html.TextBoxFor(x => x.PatientHealthCardVersion, new { @class = "form-control"})
-                 @Html.ValidationMessageFor(x => x.PatientHealthCardVersion, "", new { @class = "text-danger" })
-             </div>
-         </div>
-
-         <h5 class="h5 mt-3 col-12">@Locale.TextCC</h5>
-         <div class="col-sm-6 pb-3">
-             @Html.LabelFor(x => x.PatientCC)
-             @Html.TextBoxFor(x => x.PatientCC, new { @class = "form-control" })
-         </div>
-         <div class="col-sm-6 pb-3">
-             @Html.LabelFor(x => x.PatientCCFax)
-             @Html.TextBoxFor(x => x.PatientCCFax, new { @class = "form-control PhoneNumber" })
-             @Html.ValidationMessageFor(x => x.PatientCCFax, "", new { @class = "text-danger" })
-         </div>
-
-     </div>
-
-
-     <h3 class="h3 mt-5">@Locale.TextReasonForReferral</h3>
-     <hr />
-     <div class="row">
-         @Html.ValidationMessageFor(x => x.IndicationCheckBoxes, "", new { @class = "text-danger col-12 pb-2" })
-         @Html.EditorFor(x => x.IndicationCheckBoxes, new { style = "margin-top:5vh" })
-     </div>
-
-
-
-     <h3 class="h3 mt-5">@Locale.TextMedications</h3>
-     <hr />
-     <div class="row">
-         @Html.EditorFor(x => x.MedicationCheckBoxes, new { style = "margin-top:5vh" })
-     </div>
-
-
-     <h5 class="h5 mt-2 pb-3">@Locale.TextDeviceQues</h5>
-     <div class="row">
-         <div class="col-sm-6">
-             @Html.CheckBoxFor(x => x.isPacemaker)
-             @Html.LabelFor(x => x.isPacemaker, Locale.Pacemaker)
-         </div>
-         <div class="col-sm-6">
-             @Html.CheckBoxFor(x => x.isDefibrillator)
-             @Html.LabelFor(x => x.isDefibrillator, Locale.Defibrillator)
-         </div>
-     </div>
-
-     <h3 class="h3 mt-5">@Locale.TextTestRequested</h3>
-     <div class="row pb-3 form-check">
-         <div class="col-md-6">
-             @Html.RadioButtonFor(x => x.TestRequested, Locale.TestRequested2Weeks, new { @class = "form-check-input", name = "testRequestRadios" })
-             @Html.Label(Locale.TestRequested2Weeks, Locale.TestRequested2Weeks, new { @class = "form-check-label" })
-         </div>
-         <div class="col-md-6">
-             @Html.RadioButtonFor(x => x.TestRequested, Locale.TestRepeatInconclusive, new { @class = "form-check-input", name = "testRequestRadios" })
-             @Html.Label(Locale.TestRepeatInconclusive, Locale.TestRepeatInconclusive, new { @class = "form-check-label" })
-         </div>
-     </div>
-
-
-     <div class="pb-2 mt-5 custom-control custom-checkbox">
-         @Html.CheckBoxFor(x => x.isHCP, new { @class = "custom-control-input" })
-         @if (Model.isHCP)
-                 {
-         <label class="custom-control-label" for="isHCP">
-             @Html.Raw(Locale.TextIsHCP)
-         </label>
-                 }
-                 else
-                 {
-         <label class="custom-control-label text-danger" for="isHCP">
-             @Html.Raw(Locale.TextIsHCP)
-         </label>
-                 }
-     </div>
-     <div class="custom-control custom-checkbox">
-         @Html.CheckBoxFor(x => x.isAcknowledge, new { @class = "custom-control-input" })
-         @if (Model.isAcknowledge)
-                 {
-         <label class="custom-control-label" for="isAcknowledge">
-             @Html.Raw(Locale.TextIsAcknowledge) <a target="_blank" href="~/PocketECGTraining.pdf">here</a>
-         </label>
-                 }
-                 else
-                 {
-         <label class="custom-control-label text-danger" for="isAcknowledge">
-             @Html.Raw(Locale.TextIsAcknowledge) <a target="_blank" href="~/PocketECGTraining.pdf">here</a>
-         </label>
-                 }
-     </div>
-            @*<div class="col-1 text-right form-check">
-            @Html.CheckBoxFor(x => x.isHCP, new { @class="form-check-input" })
-        </div>
-        <div class="col-10">
-            @if (Model.isHCP)
-            {
-                @Html.Raw(Locale.TextIsHCP)
-            }
-            else
-            {
-                <div class="text-danger">
-                    @Html.Raw(Locale.TextIsHCP)
+            <div class="form-row">
+                <div class="col-sm-6 pb-3">
+                    <h5 class="mb-0">@Html.LabelFor(x => x.TestType, new { @class = "mb-0" })</h5>
+                    <p style="color:#FE5F4A;">@Locale.Text_HolterMessage</p>
+                    @Html.DropDownListFor(x => x.TestType, Model.TestTypes, new { @class = "form-control", id = "testTypeDropDown" })
                 </div>
-            }
-
-        </div>*@
-
-            @*<div class="form-inline">
-            <div class="col-1 text-right">
-                @Html.CheckBoxFor(x => x.isAcknowledge)
             </div>
-            <div class="col-10">
-                @if (Model.isAcknowledge)
+
+
+            <div class="form-row">
+                <div class="col-12 pb-3 pt-5">
+                    @Html.LabelFor(x => x.ReferringPhysicianName)
+                    @Html.TextBoxFor(x => x.ReferringPhysicianName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.ReferringPhysicianName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-6 pb-3">
+                    @Html.LabelFor(x => x.ReferringPhysicianFax)
+                    @Html.TextBoxFor(x => x.ReferringPhysicianFax, new { @class = "form-control PhoneNumber" })
+                    @Html.ValidationMessageFor(x => x.ReferringPhysicianFax, "", new { @class = "text-danger ReferringPhysicianFax" })
+                </div>
+                <div class="col-sm-6 pb-3">
+                    @Html.LabelFor(x => x.ReferringPhysicianCPSO)
+                    @Html.TextBoxFor(x => x.ReferringPhysicianCPSO, new { @class = "form-control" })
+                </div>
+                <div class="col-12">
+                    @Html.ValidationMessageFor(x => x.ReferringPhysicianCPSO, "", new { @class = "text-danger" })
+                </div>
+
+                @*<div class="col-12 pb-3">
+                    @Html.LabelFor(x => x.InterpretingPhysicianName)
+                    @Html.TextBoxFor(x => x.InterpretingPhysicianName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.InterpretingPhysicianName, "", new { @class = "text-danger" })
+                </div>*@
+            </div>
+
+            <h3 class="h3 mt-5">@Locale.TextPatientInformation</h3>
+            <hr />
+
+
+            <div class="form-row">
+                <div class="col-sm-7 pb-3">
+
+                    @Html.LabelFor(x => x.PatientName)
+                    @Html.TextBoxFor(x => x.PatientName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.PatientName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-5 pb-3">
+                    @Html.LabelFor(x => x.Gender)
+                    @Html.DropDownListFor(m => m.Gender, Model.GenderList, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-sm-7 pb-3">
+                    @Html.LabelFor(x => x.AddressLine1)
+                    @Html.TextBoxFor(x => x.AddressLine1, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.AddressLine1, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-5 pb-3">
+                    @Html.LabelFor(x => x.AddressLine2)
+                    @Html.TextBoxFor(x => x.AddressLine2, new { @class = "form-control" })
+                </div>
+
+                <div class="col-sm-5 pb-3">
+                    @Html.LabelFor(x => x.City)
+                    @Html.TextBoxFor(x => x.City, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.City, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-2 pb-3">
+                    @Html.LabelFor(x => x.Province)
+                    @Html.TextBoxFor(x => x.Province, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Province, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-5 pb-3">
+                    @Html.LabelFor(x => x.PostalCode)
+                    @Html.TextBoxFor(x => x.PostalCode, new { @class = "form-control PostalCode" })
+                    @Html.ValidationMessageFor(x => x.PostalCode, "", new { @class = "text-danger postalCodeValidation" })
+                </div>
+
+                <div class="col-sm-7 pb-3">
+                    @Html.LabelFor(x => x.PatientDob)
+                    <div class="row ml-0">
+                        @Html.TextBoxFor(model => model.PatientDobDay, new { @class = "form-control datepickerday col-3", @placeholder = "Day" })
+                        @Html.TextBoxFor(model => model.PatientDobMonth, new { @class = "form-control datepickermonth col-3 ml-1", @placeholder = "Month" })
+                        @Html.TextBoxFor(model => model.PatientDobYear, new { @class = "form-control datepickeryear col-3 ml-1", @placeholder = "Year" })
+                    </div>
+                    <div class="row ml-0">
+                        @Html.ValidationMessageFor(x => x.PatientDobDay, "", new { @class = "text-danger col-12" })
+                        @Html.ValidationMessageFor(x => x.PatientDobMonth, "", new { @class = "text-danger col-12" })
+                        @Html.ValidationMessageFor(x => x.PatientDobYear, "", new { @class = "text-danger col-12" })
+                        @Html.ValidationMessageFor(x => x.PatientDob, "", new { @class = "text-danger col-12" })
+                    </div>
+                </div>
+                <div class="col-sm-5 pb-3">
+                    @Html.LabelFor(x => x.PatientPhone)
+                    @Html.TextBoxFor(x => x.PatientPhone, new { @class = "form-control PhoneNumber" })
+                    @Html.ValidationMessageFor(x => x.PatientPhone, "", new { @class = "text-danger PatientPhone" })
+                </div>
+
+
+                <h5 class="h5 mt-3 col-12 pb-2">@Locale.Text_InsuranceType</h5>
+                <div class="container-fluid">
+                    <div class="form-check col-12">
+                        <div class="col">
+                            @Html.RadioButtonFor(x => x.InsuranceType, Locale.Text_isPublicInsurance, new { @class = "form-check-input", @checked = true, name = "insuranceTypeRadios" })
+                            @Html.Label(Locale.Text_isPublicInsurance, Locale.Text_isPublicInsurance, new { @class = "form-check-label" })
+                        </div>
+                        <div class="col">
+                            @Html.RadioButtonFor(x => x.InsuranceType, Locale.Text_isPrivateInsurance, new { @class = "form-check-input", name = "insuranceTypeRadios" })
+                            @Html.Label(Locale.Text_isPrivateInsurance, Locale.Text_isPrivateInsurance, new { @class = "form-check-label" })
+                        </div>
+                        <div class="col">
+                            @Html.RadioButtonFor(x => x.InsuranceType, Locale.Text_isCash, new { @class = "form-check-input", name = "insuranceTypeRadios" })
+                            @Html.Label(Locale.Text_isCash, Locale.Text_isCash, new { @class = "form-check-label" })
+                        </div>
+                    </div>
+                </div>
+
+                <div id="publicInsurance" class="form-row pt-3 pl-4 w-100">
+                    <div class="col-sm-7 pb-3">
+                        @Html.LabelFor(x => x.PatientHealthCardNum)
+                        @Html.TextBoxFor(x => x.PatientHealthCardNum, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.PatientHealthCardNum, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm-5 pb-3">
+                        @Html.LabelFor(x => x.PatientHealthCardVersion)
+                        @Html.TextBoxFor(x => x.PatientHealthCardVersion, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.PatientHealthCardVersion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <h5 class="h5 mt-3 col-12">@Locale.TextCC</h5>
+                <div class="col-sm-6 pb-3">
+                    @Html.LabelFor(x => x.PatientCC)
+                    @Html.TextBoxFor(x => x.PatientCC, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6 pb-3">
+                    @Html.LabelFor(x => x.PatientCCFax)
+                    @Html.TextBoxFor(x => x.PatientCCFax, new { @class = "form-control PhoneNumber" })
+                    @Html.ValidationMessageFor(x => x.PatientCCFax, "", new { @class = "text-danger PatientCCFax" })
+                </div>
+
+            </div>
+
+
+            <h3 class="h3 mt-5">@Locale.TextReasonForReferral</h3>
+            <hr />
+            <div class="row">
+                @Html.ValidationMessageFor(x => x.IndicationCheckBoxes, "", new { @class = "text-danger col-12 pb-2" })
+                @Html.EditorFor(x => x.IndicationCheckBoxes, new { style = "margin-top:5vh" })
+            </div>
+
+
+
+            <h3 class="h3 mt-5">@Locale.TextMedications</h3>
+            <hr />
+            <div class="row">
+                @Html.EditorFor(x => x.MedicationCheckBoxes, new { style = "margin-top:5vh" })
+            </div>
+
+
+            <h5 class="h5 mt-2 pb-3">@Locale.TextDeviceQues</h5>
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.CheckBoxFor(x => x.isPacemaker)
+                    @Html.LabelFor(x => x.isPacemaker, Locale.Pacemaker)
+                </div>
+                <div class="col-sm-6">
+                    @Html.CheckBoxFor(x => x.isDefibrillator)
+                    @Html.LabelFor(x => x.isDefibrillator, Locale.Defibrillator)
+                </div>
+            </div>
+
+
+            <div id="testRequested">
+                <h3 class="h3 mt-5">@Locale.TextTestRequested</h3>
+                <div class="row pb-3 form-check">
+                    <div class="col-md-6">
+                        @Html.RadioButtonFor(x => x.TestRequested, Locale.TestRequested2Weeks, new { @class = "form-check-input", name = "testRequestRadios" })
+                        @Html.Label(Locale.TestRequested2Weeks, Locale.TestRequested2Weeks, new { @class = "form-check-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.RadioButtonFor(x => x.TestRequested, Locale.TestRepeatInconclusive, new { @class = "form-check-input", name = "testRequestRadios" })
+                        @Html.Label(Locale.TestRepeatInconclusive, Locale.TestRepeatInconclusive, new { @class = "form-check-label" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row"> 
+                <div class="pt-4">
+                    @Html.LabelFor(x => x.ConfirmationEmail, new { @class = "h5" })
+                    @Html.TextBoxFor(x => x.ConfirmationEmail, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.ConfirmationEmail, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-12 pt-1">
+                    @Html.CheckBoxFor(x => x.emailResult)
+                    @Html.LabelFor(x => x.emailResult, Locale.Text_EmailResult)
+                </div>
+            </div>
+
+
+            <div class="pb-2 mt-5 custom-control custom-checkbox">
+                @Html.CheckBoxFor(x => x.isHCP, new { @class = "custom-control-input" })
+                @if (Model.isHCP)
                 {
-                    @Html.Raw(Locale.TextIsAcknowledge)
+                    <label class="custom-control-label" for="isHCP">
+                        @Html.Raw(Locale.TextIsHCP)
+                    </label>
                 }
                 else
                 {
-                    <div class="text-danger">
-                        @Html.Raw(Locale.TextIsAcknowledge) <a target="_blank" href="~/PocketECGTraining.pdf">here</a>
-                    </div>
+                    <label class="custom-control-label text-danger" for="isHCP">
+                        @Html.Raw(Locale.TextIsHCP)
+                    </label>
                 }
             </div>
-        </div>*@
+            <div class="custom-control custom-checkbox">
+                @Html.CheckBoxFor(x => x.isAcknowledge, new { @class = "custom-control-input" })
+                @if (Model.isAcknowledge)
+                {
+                    <label class="custom-control-label" for="isAcknowledge">
+                        @Html.Raw(Locale.TextIsAcknowledge) <a target="_blank" href="~/PocketECGTraining.pdf">here</a>
+                    </label>
+                }
+                else
+                {
+                    <label class="custom-control-label text-danger" for="isAcknowledge">
+                        @Html.Raw(Locale.TextIsAcknowledge) <a target="_blank" href="~/PocketECGTraining.pdf">here</a>
+                    </label>
+                }
+            </div>
+
 
 
             <div class="text-center">
                 <button type="submit" class="btn btn-primary mt-5" style="min-width:20%;">Submit</button>
             </div>
 
-            }
-        </div>
+        }
+    </div>
 <link href="~/css/bootstrap-datepicker.min.css" rel="stylesheet" />
 <script src="~/js/moment-bundle.min.js"></script>
 <script src="~/js/bootstrap-datepicker.min.js"></script>
@@ -272,16 +269,89 @@
             $('#publicInsurance').addClass('d-none');
         }
 
+        var phoneOptions = {
+            
+            onInvalid: function (val, e, f, invalid, options) {
+                var selected = e.target.id;
+                var error = invalid[0];
+                if (selected == 'ReferringPhysicianFax') {
+                    $('.ReferringPhysicianFax').html('Character ' + error.v + ' is invalid for this position. Phone numbers can only contain digits');
+                }
+                if (selected == 'PatientPhone') {
+                    $('.PatientPhone').html('Character ' + error.v + ' is invalid for this position. Phone numbers can only contain digits');
+                }
+                if (selected =='PatientCCFax') {
+                    $('.PatientCCFax').html('Character ' + error.v + ' is invalid for this position. Phone numbers can only contain digits');
+                }
+               
+            },
+            onKeyPress: function (cep, event, currentField, options) {
+                console.log(event);
+                var selected = event.target.id;
+                
+                if (selected == 'ReferringPhysicianFax') {
+                    $('.ReferringPhysicianFax').html('');
+                }
+                if (selected == 'PatientPhone') {
+                    $('.PatientPhone').html('');
+                }
+                if (selected == 'PatientCCFax') {
+                    $('.PatientCCFax').html('');
+                }
+            }
+        };
+        $(".PhoneNumber").mask('000-000-0000', phoneOptions);
 
-        $(".PhoneNumber").mask('000-000-0000');
 
-        $('.PostalCode').mask('S0S 0S0')
+        var postalCodeOptions = {
+            onInvalid: function (val, e, f, invalid, options) {
+                var error = invalid[0];
+                $('.postalCodeValidation').html("Character "+ error.v+ " is invalid for this position. Postal codes should be in format N1N 1N1.");
+            },
+            onKeyPress: function (cep, event, currentField, options) {
+                $('.postalCodeValidation').html(".");
+            },
+        };
+        $('.PostalCode').mask('S0S 0S0', postalCodeOptions);
+
+        if ($('#testTypeDropDown').val() == '2') {
+            $('#testRequested').addClass('d-none');
+        }
+
+        $(".datepickerday").mask('00');
+        $(".datepickeryear").mask('0000');
     });
 
 
-    $('.datepicker').datepicker({
-        endDate: '0d',
-        format:'dd M yyyy'
+    $('.datepickerday').datepicker({
+        //format: 'dd M',
+        //maxViewMode:1,
+        //changeYear: false
+        format: 'dd',
+        minViewMode: 'days',
+        maxViewMode: 'days',
+        startView: 'days'
+    });
+
+    $('.datepickermonth').datepicker({
+        //format: 'dd M',
+        //maxViewMode:1,
+        //changeYear: false
+        format: 'M',
+        minViewMode: 'months',
+        maxViewMode: 'months',
+        startView: 'months'
+
+    });
+
+
+   
+    $('.datepickeryear').datepicker({
+        //endDate: '0d',
+        format: 'yyyy',
+        viewMode: "years",
+        minViewMode: "years",
+        maxDate: moment()
 
     });
 
@@ -291,6 +361,17 @@
                 $('#publicInsurance').removeClass('d-none');
             } else {
                 $('#publicInsurance').addClass('d-none');
+            }
+        });
+
+    
+
+    $('#testTypeDropDown').change(
+        function () {
+            if ($(this).val() == '2') {
+                $('#testRequested').addClass('d-none');
+            } else {
+                $('#testRequested').removeClass('d-none'); 
             }
         });
 </script>

@@ -10,8 +10,11 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -37,7 +40,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
             try
             {
                 ViewData["Message"] = message;
-
+                model.TestTypes = getTestTypes();
                 model.IndicationCheckBoxes = getIndications();
                 model.MedicationCheckBoxes = getMedications();
                 model.GenderList = getGenderList();
@@ -47,7 +50,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("An error occured getting the pocket template. Exception: " + ex.Message.ToString());
+                Log.Error($"An error occured getting the pocket template. Exception:  {ex.Message} {ex.InnerException}");
             }
             return View(model);
         }
@@ -83,13 +86,80 @@ namespace MHS.P4.OnlineReferrals.Controllers
                         ModelState.AddModelError("PatientCCFax", Locale.Error_PhoneFaxNumber);
                     }
                 }
+                if (!String.IsNullOrEmpty(model.PatientDobDay) && !String.IsNullOrEmpty(model.PatientDobMonth) && !String.IsNullOrEmpty(model.PatientDobYear))
+                {
+                    int dobmonth = 0;
+                    try
+                    {
+                        dobmonth = DateTime.ParseExact(model.PatientDobMonth, "MMM", CultureInfo.InvariantCulture).Month;
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("PatientDobMonth", Locale.Error_MonthInvalid);
+                        Log.Information($"Physician {model.ReferringPhysicianName} tried to enter month : {model.PatientDobMonth} which failed parsing. Error:  {ex.Message} {ex.InnerException}");
+                    }
+                    try
+                    {
+                        DateTime dob = new DateTime(year: int.Parse(model.PatientDobYear), month: dobmonth, day: int.Parse(model.PatientDobDay));
+                        if (dob > DateTime.Today)
+                        {
+                            ModelState.AddModelError("PatientDob", Locale.Error_DOBFuture);
+                        }
+                        else
+                        {
+                            model.PatientDob = dob.ToString("dd MMM yyyy");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("PatientDob", Locale.Error_DOBInvalid);
+                        Log.Information($"Physician {model.ReferringPhysicianName} tried to enter dob with date {model.PatientDobDay}, month: {model.PatientDobMonth} and year {model.PatientDobYear} which is not a valid date. Error:  {ex.Message} {ex.InnerException}");
+                    }
 
+
+                }
+                if (!String.IsNullOrEmpty(model.ConfirmationEmail))
+                {
+                    try
+                    {
+                        MailAddress m = new MailAddress(model.ConfirmationEmail);
+                    }
+                    catch (FormatException)
+                    {
+                        ModelState.AddModelError("ConfirmationEmail", Locale.Error_EmailInvalid);
+                    }
+                }
                 if (ModelState.IsValid && !model.isError)
                 {
-                    await SaveInDatabase(model);
-                    bool result = FillForm(model);
-                    if (result)
+                    bool resultDB=await SaveInDatabase(model);
+                    bool resultSave = FillForm(model);
+                    if (!(resultDB && resultSave))
                     {
+                        if (resultDB && !resultSave)
+                        {
+                            Log.Error($"Form for pt {model.PatientName} was saved successfully in db, but fax failed");
+                        }
+                        else if (!resultDB && resultSave)
+                        {
+                            Log.Error($"Form for pt {model.PatientName} was saved successfully as fax, but db failed");
+                        }
+                        else
+                        {
+                            Log.Error($"Form for pt {model.PatientName} was failed in both db and fax");
+                        }
+                    }
+                    if (resultDB || resultSave)
+                    {
+                        if (!String.IsNullOrEmpty(model.ConfirmationEmail))
+                        {
+                            bool sentConfirmation = sendEmail(model.ConfirmationEmail);
+                            if (!sentConfirmation)
+                            {
+                                Log.Error($"An error occured sending confirmation email to physician {model.ReferringPhysicianName} for pt {model.PatientName} at email {model.ConfirmationEmail}.");
+                                return RedirectToAction("Index", new { message = Locale.Error_SendingConfirmationEmail });
+                            }
+                        }
+
                         return RedirectToAction("Index", new { message = "Form submitted successfully!" });
                     }
                     else
@@ -100,6 +170,8 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 model.GenderList = getGenderList();
                 var indications = getIndications();
                 var medications = getMedications();
+                model.TestTypes = getTestTypes();
+                model.TestTypes.Where(x => x.Value == model.TestType).FirstOrDefault().Selected = true;
                 if (model.IndicationCheckBoxes.Any(x => x.IsChecked))
                 {
                     foreach (var y in model.IndicationCheckBoxes.Where(x => x.IsChecked).ToList())
@@ -120,11 +192,32 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("An error occured saving form. Exception: " + ex.Message.ToString());
+                Log.Error($"An error occured saving form for pt {model.PatientName} by physician {model.ReferringPhysicianName}. Exception:  {ex.Message} {ex.InnerException}");
             }
             return View(model);
         }
 
+
+
+        public List<SelectListItem> getTestTypes()
+        {
+            var testTypesList = new List<SelectListItem>();
+            try
+            {
+                testTypesList.AddRange(dbContext.TestType.Select(x =>
+                    new SelectListItem
+                    {
+                        Text = x.TestName,
+                        Value = x.TestId.ToString()
+                    }
+                ).ToList());
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occured getting TestTypes. Error:  {ex.Message} {ex.InnerException}");
+            }
+            return testTypesList;
+        }
 
         public List<IndicationCheckBoxes> getIndications()
         {
@@ -147,7 +240,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("An error occured getting indications. Error: " + ex.Message.ToString());
+                Log.Error($"An error occured getting indications. Error:  {ex.Message} {ex.InnerException}");
             }
             return indicationCheckBoxes;
 
@@ -174,7 +267,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("An error occured getting indications. Error: " + ex.Message.ToString());
+                Log.Error($"An error occured getting indications. Error:  {ex.Message} {ex.InnerException}");
             }
             return medicationCheckBoxes;
         }
@@ -196,6 +289,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
             try
             {
                 PocketReferrals referral = new PocketReferrals();
+                referral.TestType = int.Parse(model.TestType);
                 referral.ReferringPhysician = model.ReferringPhysicianName;
                 referral.ReferringPhysicianFax = model.ReferringPhysicianFax;
                 referral.ReferringPhysicianCpso = model.ReferringPhysicianCPSO;
@@ -216,7 +310,14 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 referral.PatientCcfax = model.PatientCCFax;
                 referral.IsPacemaker = model.isPacemaker;
                 referral.IsDefibrillator = model.isDefibrillator;
-                referral.TestRequested = model.TestRequested;
+                referral.ConfirmationEmail = model.ConfirmationEmail;
+                referral.EmailResult = model.emailResult;
+
+                if (!model.TestType.Equals("2"))
+                {
+                    referral.TestRequested = model.TestRequested;
+                }
+
                 referral.PatientReasonForReferral = getStringIndications(model.IndicationCheckBoxes);
                 referral.PatientMedications = getStringMedications(model.MedicationCheckBoxes);
                 referral.DateCreated = DateTime.Now;
@@ -229,7 +330,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"An error occured saving patient data in the database. Error: {ex.Message}. Data: {model}");
+                Log.Error($"An error occured saving patient data in the database for pt {model.PatientName} and physician {model.ReferringPhysicianName}. Error: {ex.Message} {ex.InnerException}. Data: {model}");
             }
 
 
@@ -241,13 +342,15 @@ namespace MHS.P4.OnlineReferrals.Controllers
             try
             {
                 string pdfTemplate = config["BlankPdf"];
-                string newFile = config["SavePdf"] + "HeartHealthFAX-"+Guid.NewGuid().ToString().Replace("-",".")+ "--#'Web%20Upload'#.pdf";
+                string newFile = config["SavePdf"] + "HeartHealthFAX-" + Guid.NewGuid().ToString().Replace("-", ".") + "--#'Web%20Upload'#.pdf";
 
                 PdfReader pdfReader = new PdfReader(pdfTemplate);
                 PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
                 AcroFields pdfFormFields = pdfStamper.AcroFields;
 
                 pdfFormFields.SetField("ReferringPhysician", model.ReferringPhysicianName);
+                pdfFormFields.SetField("ConfirmationEmail", model.ConfirmationEmail);
+                pdfFormFields.SetField("EmailResult", model.emailResult?"Yes":"No");
                 pdfFormFields.SetField("RPFax", model.ReferringPhysicianFax);
                 pdfFormFields.SetField("CPSO", model.ReferringPhysicianCPSO);
                 pdfFormFields.SetField("IP", model.InterpretingPhysicianName);
@@ -274,10 +377,11 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 string indications = "", medications = "", device = "";
 
                 indications = getStringIndications(model.IndicationCheckBoxes);
-                var indi= Regex.Split(indications, "(?<=^(.{90})+)");
-                indications = String.Join("\n", indi.ToArray());
+                //var indi= Regex.Split(indications, "(?<=^(.{90})+)");
+                //indications = String.Join("\n", indi.ToArray());
 
                 medications = getStringMedications(model.MedicationCheckBoxes);
+
 
 
                 if (model.isPacemaker) { device = device + ", Pacemaker"; }
@@ -287,7 +391,16 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 pdfFormFields.SetField("Indications", indications);
                 pdfFormFields.SetField("Medications", medications);
                 pdfFormFields.SetField("Device", device);
-                pdfFormFields.SetField("TestRequested", model.TestRequested);
+
+
+                if (!model.TestType.Equals("2"))
+                {
+                    pdfFormFields.SetField("TestRequested", model.TestRequested);
+                }
+
+
+                pdfFormFields.SetField("TestType", getStringTestType(int.Parse(model.TestType)));
+                pdfFormFields.SetField("ReceivedOn", DateTime.Now.ToString("dd MMM yyyy hh:mm tt"));
                 // flatten the form to remove editting options, set it to false  
                 // to leave the form open to subsequent manual edits  
                 pdfStamper.FormFlattening = true;
@@ -299,9 +412,61 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"An error occured adding fields in pdf. Error: {ex.Message}. Data: {model}");
+                Log.Error($"An error occured adding fields in pdf  for pt {model.PatientName} and physician {model.ReferringPhysicianName}. Error: {ex.Message} {ex.InnerException}. Data: {model}");
                 return false;
             }
+        }
+
+
+        public bool sendEmail(string email)
+        {
+            Log.Information($"Beginning to send confirmation email to {email}");
+            try
+            {
+                string host = config["EmailSettings:Server"];
+                string port = config["EmailSettings:ServerPort"];
+                SmtpClient client = new SmtpClient(host == null ? "192.168.80.249" : host);
+                client.UseDefaultCredentials = config["EmailSettings:UseDefaultCredentials"] == "true";
+                client.EnableSsl = config["EmailSettings:EnableSsl"] == "true";
+                client.Port = int.Parse(port == null ? "25" : port);
+
+                var sb = new StringBuilder();
+                sb.AppendLine(Locale.Text_EmailLine1);
+                sb.AppendLine(Locale.Text_EmailLine2);
+                sb.AppendLine();
+                sb.AppendLine();
+                sb.AppendLine(Locale.Text_ThankYou);
+                sb.AppendLine(Locale.Text_MhsTeam);
+
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.From = new MailAddress(config["EmailSettings:SendEmailFrom"]);
+                mailMessage.To.Add(email);
+                mailMessage.Bcc.Add(config["EmailSettings:SendBcc"]);
+                mailMessage.Body = sb.ToString();
+                mailMessage.IsBodyHtml = false;
+                mailMessage.Subject = Locale.Text_EmailSubject;
+                client.Send(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occured sending confirmation email to {email}. Error:  {ex.Message} {ex.InnerException}");
+                return false;
+            }
+            return true;
+        }
+
+        public string getStringTestType(int testtype)
+        {
+            string test = "";
+            try
+            {
+                test = dbContext.TestType.Where(x => x.TestId == testtype).FirstOrDefault().TestName;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured converting test type {testtype} to string. Error: {ex.Message} {ex.InnerException}.");
+            }
+            return test;
         }
 
         public string getStringIndications(List<IndicationCheckBoxes> values)
@@ -320,11 +485,12 @@ namespace MHS.P4.OnlineReferrals.Controllers
                         indications = indications + ", " + x.Name + ": " + x.Notes;
                     }
                 }
-            }catch(Exception ex)
-            {
-                Log.Error($"Error occured converting indications to string. Error {ex.Message.ToString()}. Indications: {values.Select(x=>x.Name.ToList())}");
             }
-      
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured converting indications to string. Error  {ex.Message} {ex.InnerException}. Indications: {values.Select(x => x.Name.ToList())}");
+            }
+
             return indications;
         }
 
@@ -332,22 +498,23 @@ namespace MHS.P4.OnlineReferrals.Controllers
         {
             string medications = "";
 
-            try { 
-            foreach (var x in values.Where(x => x.IsChecked))
+            try
             {
-                if (String.IsNullOrEmpty(x.Notes))
+                foreach (var x in values.Where(x => x.IsChecked))
                 {
-                    medications = medications + ", " + x.Name;
+                    if (String.IsNullOrEmpty(x.Notes))
+                    {
+                        medications = medications + ", " + x.Name;
+                    }
+                    else
+                    {
+                        medications = medications + ", " + x.Name + ": " + x.Notes;
+                    }
                 }
-                else
-                {
-                    medications = medications + ", " + x.Name + ": " + x.Notes;
-                }
-            }
             }
             catch (Exception ex)
             {
-                Log.Error($"Error occured converting medications to string. Error {ex.Message.ToString()}. Medications: {values.Select(x => x.Name.ToList())}");
+                Log.Error($"Error occured converting medications to string. Error  {ex.Message} {ex.InnerException}. Medications: {values.Select(x => x.Name.ToList())}");
             }
             return medications;
         }

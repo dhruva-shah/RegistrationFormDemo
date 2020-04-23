@@ -14,10 +14,18 @@ namespace MHS.P4.OnlineReferrals.Models
 
         public GeneralModel()
         {
+            TestTypes = new List<SelectListItem>();
         }
 
         public bool isError { get; set; }
         public string Error { get; set; }
+
+        [Display(Name = "Text_TestTypes", ResourceType = typeof(Locale))]
+        public string TestType { get; set; }
+
+        
+        public List<SelectListItem> TestTypes { get; set; }
+
         //Physician Info
         [Display(Name = "ReferringPhysicianName", ResourceType = typeof(Locale))]
         [Required(ErrorMessageResourceName = "Error_ReferringPhysician", ErrorMessageResourceType = typeof(Locale))]
@@ -57,8 +65,15 @@ namespace MHS.P4.OnlineReferrals.Models
         public List<SelectListItem> GenderList { get; set; }
 
 
+        [Required(ErrorMessageResourceName = "Error_DOBDay", ErrorMessageResourceType = typeof(Locale))]
+        public string PatientDobDay { get; set; }
+        [Required(ErrorMessageResourceName = "Error_DOBMonth", ErrorMessageResourceType = typeof(Locale))]
+        public string PatientDobMonth { get; set; }
+        [Required(ErrorMessageResourceName = "Error_DOBYear", ErrorMessageResourceType = typeof(Locale))]
+        public string PatientDobYear { get; set; }
+
         [Display(Name = "Dob", ResourceType = typeof(Locale))]
-        [Required(ErrorMessageResourceName = "Error_DOB", ErrorMessageResourceType = typeof(Locale))]
+        //[Required(ErrorMessageResourceName = "Error_DOB", ErrorMessageResourceType = typeof(Locale))]
         public string PatientDob { get; set; }
 
 
@@ -138,6 +153,14 @@ namespace MHS.P4.OnlineReferrals.Models
         [Required]
         [Range(typeof(bool), "true", "true", ErrorMessageResourceName = "TextIsAcknowledge", ErrorMessageResourceType = typeof(Locale))]
         public bool isAcknowledge { get; set; }
+
+        [Display(Name = "ConfirmationEmail", ResourceType = typeof(Locale))]
+        [EmailAddress(ErrorMessageResourceName = "Error_EmailInvalid", ErrorMessageResourceType = typeof(Locale))]
+        public string ConfirmationEmail { get; set; }
+
+
+        [Display(Name = "Text_EmailResult", ResourceType = typeof(Locale))]
+        public bool emailResult { get; set; }
 
     }
 }
