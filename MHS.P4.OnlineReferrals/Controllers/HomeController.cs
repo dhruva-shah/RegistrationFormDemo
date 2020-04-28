@@ -310,6 +310,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 referral.PatientCcfax = model.PatientCCFax;
                 referral.IsPacemaker = model.isPacemaker;
                 referral.IsDefibrillator = model.isDefibrillator;
+                referral.Notes = model.Notes;
                 referral.ConfirmationEmail = model.ConfirmationEmail;
                 referral.EmailResult = model.emailResult;
 
@@ -401,6 +402,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
 
                 pdfFormFields.SetField("TestType", getStringTestType(int.Parse(model.TestType)));
                 pdfFormFields.SetField("ReceivedOn", DateTime.Now.ToString("dd MMM yyyy hh:mm tt"));
+                pdfFormFields.SetField("Notes", model.Notes);
                 // flatten the form to remove editting options, set it to false  
                 // to leave the form open to subsequent manual edits  
                 pdfStamper.FormFlattening = true;

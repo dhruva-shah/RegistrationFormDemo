@@ -36,6 +36,8 @@ namespace MHS.P4.OnlineReferrals.Models.Database
         public string ConfirmationEmail { get; set; }
         public bool? EmailResult { get; set; }
 
+        public string Notes { get; set; }
+
         public virtual TestType TestTypeNavigation { get; set; }
     }
 }

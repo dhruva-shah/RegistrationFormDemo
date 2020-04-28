@@ -154,6 +154,9 @@ namespace MHS.P4.OnlineReferrals.Models
         [Range(typeof(bool), "true", "true", ErrorMessageResourceName = "TextIsAcknowledge", ErrorMessageResourceType = typeof(Locale))]
         public bool isAcknowledge { get; set; }
 
+        [Display(Name = "Notes", ResourceType = typeof(Locale))]
+        public string Notes { get; set; }
+
         [Display(Name = "ConfirmationEmail", ResourceType = typeof(Locale))]
         [EmailAddress(ErrorMessageResourceName = "Error_EmailInvalid", ErrorMessageResourceType = typeof(Locale))]
         public string ConfirmationEmail { get; set; }

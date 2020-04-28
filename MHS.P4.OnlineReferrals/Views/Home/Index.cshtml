@@ -9,6 +9,7 @@
         <div class="h3 text-danger">@Model.Error</div>
         <div class="container">
             <h1 class="text-center">Online Referral Form</h1>
+            <h5 class="text-center mb-5" style="color:#FE5F4A;">Please note: Due to extremely high parcel volumes, Canada Post and other delivery services we are experiencing delays in the delivery of our Holter Monitors. We are communicating this to your patients. </h5>
         </div>
 
         @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "patchForm", @class = "form-horizontal" }))
@@ -202,7 +203,14 @@
                 </div>
             </div>
 
-            <div class="form-row"> 
+            <div class="form-row">
+                <div class="pt-4 col-12">
+                    @Html.LabelFor(x => x.Notes, new { @class = "h5" })
+                    @Html.TextBoxFor(x => x.Notes, new { @class = "form-control"})
+                </div>
+            </div>
+
+            <div class="form-row">
                 <div class="pt-4">
                     @Html.LabelFor(x => x.ConfirmationEmail, new { @class = "h5" })
                     @Html.TextBoxFor(x => x.ConfirmationEmail, new { @class = "form-control" })

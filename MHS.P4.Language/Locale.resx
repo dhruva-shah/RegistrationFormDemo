@@ -258,6 +258,9 @@
   <data name="InterpretingPhysicianName" xml:space="preserve">
     <value>Interpreting Physician</value>
   </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
   <data name="Pacemaker" xml:space="preserve">
     <value>Pacemaker</value>
   </data>
