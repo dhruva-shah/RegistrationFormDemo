@@ -214,6 +214,15 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Year of birth cannot be less than 1900.
+        /// </summary>
+        public static string Error_DOBPast {
+            get {
+                return ResourceManager.GetString("Error_DOBPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Year of birth is required.
         /// </summary>
         public static string Error_DOBYear {

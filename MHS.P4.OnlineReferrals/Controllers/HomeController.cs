@@ -105,6 +105,10 @@ namespace MHS.P4.OnlineReferrals.Controllers
                         {
                             ModelState.AddModelError("PatientDob", Locale.Error_DOBFuture);
                         }
+                        else if (dob.Year < 1900)
+                        {
+                            ModelState.AddModelError("PatientDob", Locale.Error_DOBPast);
+                        }
                         else
                         {
                             model.PatientDob = dob.ToString("dd MMM yyyy");

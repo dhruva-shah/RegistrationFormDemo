@@ -168,6 +168,9 @@
   <data name="Error_DOBMonth" xml:space="preserve">
     <value>Month of birth is required</value>
   </data>
+  <data name="Error_DOBPast" xml:space="preserve">
+    <value>Year of birth cannot be less than 1900</value>
+  </data>
   <data name="Error_DOBYear" xml:space="preserve">
     <value>Year of birth is required</value>
   </data>
