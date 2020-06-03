@@ -141,25 +141,25 @@ namespace MHS.P4.OnlineReferrals.Controllers
                     {
                         if (resultDB && !resultSave)
                         {
-                            Log.Error($"Form for pt {model.PatientName} was saved successfully in db, but fax failed");
+                            Log.Error($"Form for pt {model.PatientFirstName} {model.PatientLastName} was saved successfully in db, but fax failed");
                         }
                         else if (!resultDB && resultSave)
                         {
-                            Log.Error($"Form for pt {model.PatientName} was saved successfully as fax, but db failed");
+                            Log.Error($"Form for pt {model.PatientFirstName} {model.PatientLastName} was saved successfully as fax, but db failed");
                         }
                         else
                         {
-                            Log.Error($"Form for pt {model.PatientName} was failed in both db and fax");
+                            Log.Error($"Form for pt {model.PatientFirstName} {model.PatientLastName} was failed in both db and fax");
                         }
                     }
                     if (resultDB || resultSave)
                     {
                         if (!String.IsNullOrEmpty(model.ConfirmationEmail))
                         {
-                            bool sentConfirmation = sendEmail(model.ConfirmationEmail);
+                            bool sentConfirmation = sendEmail(model.ConfirmationEmail, model.PatientFirstName,model.PatientLastName);
                             if (!sentConfirmation)
                             {
-                                Log.Error($"An error occured sending confirmation email to physician {model.ReferringPhysicianName} for pt {model.PatientName} at email {model.ConfirmationEmail}.");
+                                Log.Error($"An error occured sending confirmation email to physician {model.ReferringPhysicianName} for pt {model.PatientFirstName} {model.PatientLastName} at email {model.ConfirmationEmail}.");
                                 return RedirectToAction("Index", new { message = Locale.Error_SendingConfirmationEmail });
                             }
                         }
@@ -196,7 +196,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"An error occured saving form for pt {model.PatientName} by physician {model.ReferringPhysicianName}. Exception:  {ex.Message} {ex.InnerException}");
+                Log.Error($"An error occured saving form for pt {model.PatientFirstName} {model.PatientLastName} by physician {model.ReferringPhysicianName}. Exception:  {ex.Message} {ex.InnerException}");
             }
             return View(model);
         }
@@ -298,7 +298,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 referral.ReferringPhysicianFax = model.ReferringPhysicianFax;
                 referral.ReferringPhysicianCpso = model.ReferringPhysicianCPSO;
                 referral.InterpretingPhysician = model.InterpretingPhysicianName;
-                referral.PatientName = model.PatientName;
+                referral.PatientName = model.PatientFirstName+' '+model.PatientLastName;
                 referral.AddressLine1 = model.AddressLine1;
                 referral.AddressLine2 = model.AddressLine2;
                 referral.City = model.City;
@@ -335,7 +335,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"An error occured saving patient data in the database for pt {model.PatientName} and physician {model.ReferringPhysicianName}. Error: {ex.Message} {ex.InnerException}. Data: {model}");
+                Log.Error($"An error occured saving patient data in the database for pt {model.PatientFirstName} {model.PatientLastName} and physician {model.ReferringPhysicianName}. Error: {ex.Message} {ex.InnerException}. Data: {model}");
             }
 
 
@@ -362,7 +362,7 @@ namespace MHS.P4.OnlineReferrals.Controllers
 
 
 
-                pdfFormFields.SetField("PatientName", model.PatientName);
+                pdfFormFields.SetField("PatientName", model.PatientFirstName+' '+model.PatientLastName);
                 pdfFormFields.SetField("Gender", model.Gender);
                 pdfFormFields.SetField("AddressLine1", model.AddressLine1);
                 pdfFormFields.SetField("AddressLine2", model.AddressLine2);
@@ -418,15 +418,15 @@ namespace MHS.P4.OnlineReferrals.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"An error occured adding fields in pdf  for pt {model.PatientName} and physician {model.ReferringPhysicianName}. Error: {ex.Message} {ex.InnerException}. Data: {model}");
+                Log.Error($"An error occured adding fields in pdf  for pt {model.PatientFirstName} {model.PatientLastName} and physician {model.ReferringPhysicianName}. Error: {ex.Message} {ex.InnerException}. Data: {model}");
                 return false;
             }
         }
 
 
-        public bool sendEmail(string email)
+        public bool sendEmail(string email, string ptFirstName, string ptLastName)
         {
-            Log.Information($"Beginning to send confirmation email to {email}");
+            Log.Information($"Beginning to send confirmation email to {email} for pt {ptFirstName} {ptLastName}");
             try
             {
                 string host = config["EmailSettings:Server"];
@@ -435,9 +435,10 @@ namespace MHS.P4.OnlineReferrals.Controllers
                 client.UseDefaultCredentials = config["EmailSettings:UseDefaultCredentials"] == "true";
                 client.EnableSsl = config["EmailSettings:EnableSsl"] == "true";
                 client.Port = int.Parse(port == null ? "25" : port);
+                string patient = ptFirstName+' '+ptLastName.Substring(0,1);
 
                 var sb = new StringBuilder();
-                sb.AppendLine(Locale.Text_EmailLine1);
+                sb.AppendLine(String.Format(Locale.Text_EmailLine1,patient));
                 sb.AppendLine(Locale.Text_EmailLine2);
                 sb.AppendLine();
                 sb.AppendLine();

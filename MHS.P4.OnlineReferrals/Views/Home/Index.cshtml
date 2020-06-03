@@ -56,13 +56,19 @@
 
 
             <div class="form-row">
-                <div class="col-sm-7 pb-3">
+                <div class="col-sm-5 pb-4">
 
-                    @Html.LabelFor(x => x.PatientName)
-                    @Html.TextBoxFor(x => x.PatientName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(x => x.PatientName, "", new { @class = "text-danger" })
+                    @Html.LabelFor(x => x.PatientFirstName)
+                    @Html.TextBoxFor(x => x.PatientFirstName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.PatientFirstName, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-sm-5 pb-3">
+                <div class="col-sm-5 pb-4">
+
+                    @Html.LabelFor(x => x.PatientLastName)
+                    @Html.TextBoxFor(x => x.PatientLastName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.PatientLastName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-2 pb-3">
                     @Html.LabelFor(x => x.Gender)
                     @Html.DropDownListFor(m => m.Gender, Model.GenderList, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })

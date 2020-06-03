@@ -313,6 +313,15 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Patient first name is required.
+        /// </summary>
+        public static string Error_PatientFirstName {
+            get {
+                return ResourceManager.GetString("Error_PatientFirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Patient gender is required.
         /// </summary>
         public static string Error_PatientGender {
@@ -322,11 +331,11 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Patient name is required.
+        ///   Looks up a localized string similar to Patient last name is required.
         /// </summary>
-        public static string Error_PatientName {
+        public static string Error_PatientLastName {
             get {
-                return ResourceManager.GetString("Error_PatientName", resourceCulture);
+                return ResourceManager.GetString("Error_PatientLastName", resourceCulture);
             }
         }
         
@@ -520,6 +529,15 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Firstname.
+        /// </summary>
+        public static string PatientFirstName {
+            get {
+                return ResourceManager.GetString("PatientFirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Health Card Number.
         /// </summary>
         public static string PatientHealthCardNum {
@@ -538,11 +556,11 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to Lastname.
         /// </summary>
-        public static string PatientName {
+        public static string PatientLastName {
             get {
-                return ResourceManager.GetString("PatientName", resourceCulture);
+                return ResourceManager.GetString("PatientLastName", resourceCulture);
             }
         }
         
@@ -619,7 +637,7 @@ namespace MHS.P4.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is to confirm that your referral was submitted successfully..
+        ///   Looks up a localized string similar to This is to confirm that your referral was submitted successfully for patient {0}..
         /// </summary>
         public static string Text_EmailLine1 {
             get {

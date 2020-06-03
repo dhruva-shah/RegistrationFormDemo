@@ -53,9 +53,13 @@ namespace MHS.P4.OnlineReferrals.Models
         public string InterpretingPhysicianName { get; set; }
 
         //Patient Info
-        [Display(Name = "PatientName", ResourceType = typeof(Locale))]
-        [Required(ErrorMessageResourceName = "Error_PatientName", ErrorMessageResourceType = typeof(Locale))]
-        public string PatientName { get; set; }
+        [Display(Name = "PatientFirstName", ResourceType = typeof(Locale))]
+        [Required(ErrorMessageResourceName = "Error_PatientFirstName", ErrorMessageResourceType = typeof(Locale))]
+        public string PatientFirstName { get; set; }
+
+        [Display(Name = "PatientLastName", ResourceType = typeof(Locale))]
+        [Required(ErrorMessageResourceName = "Error_PatientLastName", ErrorMessageResourceType = typeof(Locale))]
+        public string PatientLastName { get; set; }
 
         [Display(Name = "Gender", ResourceType = typeof(Locale))]
         [Required(ErrorMessageResourceName = "Error_PatientGender", ErrorMessageResourceType = typeof(Locale))]
