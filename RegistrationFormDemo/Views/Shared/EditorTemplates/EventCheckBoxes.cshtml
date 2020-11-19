@@ -1,0 +1,13 @@
+﻿@model RegistrationFormDemo.Models.EventCheckBoxes
+@using Language
+
+
+<div class="form-group col-sm-6">
+    <div class="IndicationCheckBoxes">
+        @Html.HiddenFor(x => x.EventId)
+        @Html.CheckBoxFor(x => x.IsChecked, new { Id = Model.Name })
+        @Html.HiddenFor(x => x.Name)
+        @Html.LabelFor(x => x.IsChecked, Model.Name)
+        <br />
+    </div>
+</div>
